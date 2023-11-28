@@ -6,11 +6,6 @@ public class CellPrefab : MonoBehaviour
 {
     public GameObject WallPrefab;
     public GameObject Plane;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public void SpawnWalls(Cell cell)
     {
