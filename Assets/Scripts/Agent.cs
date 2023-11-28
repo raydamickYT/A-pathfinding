@@ -30,6 +30,7 @@ public class Agent : MonoBehaviour
     public void FindPathToTarget(Vector2Int startPos, Vector2Int endPos, Cell[,] grid)
     {
         path = Astar.FindPathToTarget(startPos, endPos, grid);
+        Debug.Log(grid);
         DrawPath();
     }
 

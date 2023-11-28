@@ -5,6 +5,7 @@ using UnityEngine;
 public class CellPrefab : MonoBehaviour
 {
     public GameObject WallPrefab;
+    public GameObject Plane;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +14,7 @@ public class CellPrefab : MonoBehaviour
 
     public void SpawnWalls(Cell cell)
     {
+        cell.plane = Plane;
         if (cell.HasWall(Wall.DOWN)) { Instantiate(WallPrefab, transform.position, Quaternion.LookRotation(new Vector3(0,0,-1)), transform); }
         if (cell.HasWall(Wall.UP)) { Instantiate(WallPrefab, transform.position, Quaternion.LookRotation(new Vector3(0,0,1)), transform); }
         if (cell.HasWall(Wall.LEFT)) { Instantiate(WallPrefab, transform.position, Quaternion.LookRotation(new Vector3(-1,0,0)), transform); }
