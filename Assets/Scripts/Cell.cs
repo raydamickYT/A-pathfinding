@@ -29,30 +29,22 @@ public class Cell
         return (walls & wallDirection) != 0;
     }
 
-    public List<Cell> GetNeighbours(Cell[,] grid)
+    public List<Cell> GetNeighbours(Cell[,] grid, object AstarScript)
     {
         List<Cell> result = new List<Cell>();
         for (int x = -1; x < 2; x++)
         {
             for (int y = -1; y < 2; y++)
             {
-                // Skip if the cell is the current cell or diagonal (based on your code's logic)
-                if (Mathf.Abs(x) == Mathf.Abs(y))
-                    continue;
-
                 int cellX = this.gridPosition.x + x;
                 int cellY = this.gridPosition.y + y;
-
-                // Check grid bounds
-                if (cellX < 0 || cellX >= grid.GetLength(0) || cellY < 0 || cellY >= grid.GetLength(1))
+                if (cellX < 0 || cellX >= grid.GetLength(0) || cellY < 0 || cellY >= grid.GetLength(1) || Mathf.Abs(x) == Mathf.Abs(y))
+                {
                     continue;
+                }
+                Cell canditateCell = grid[cellX, cellY];
 
-                // Check for walls
-                if ((x == -1 && HasWall(Wall.LEFT)) || (x == 1 && HasWall(Wall.RIGHT)) ||
-                    (y == -1 && HasWall(Wall.DOWN)) || (y == 1 && HasWall(Wall.UP)))
-                    continue;
-
-                result.Add(grid[cellX, cellY]);
+                result.Add(canditateCell);
             }
         }
         return result;

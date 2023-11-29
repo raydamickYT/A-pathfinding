@@ -6,6 +6,7 @@ using System;
 
 public class Astar
 {
+    Vector2Int gridSize;
     /// <summary>
     /// TODO: Implement this function so that it returns a list of Vector2Int positions which describes a path from the startPos to the endPos
     /// Note that you will probably need to add some helper functions
@@ -16,6 +17,13 @@ public class Astar
     /// <returns></returns>
     public List<Vector2Int> FindPathToTarget(Vector2Int startPos, Vector2Int endPos, Cell[,] grid)
     {
+        gridSize = new(grid.GetLength(0), grid.GetLength(1));
+        //als dit false is dan heb je buiten de grid geklikt
+        if (!CheckIfGrid(endPos, gridSize))
+        {
+            Debug.LogWarning("hahahah stupid");
+            return default;
+        }
         List<Node> openList = new List<Node>();
         HashSet<Node> closedList = new HashSet<Node>();
 
@@ -33,7 +41,7 @@ public class Astar
             }
 
             //process neighbours update list
-            foreach (Cell neighborCell in grid[currentNode.position.x, currentNode.position.y].GetNeighbours(grid))
+            foreach (Cell neighborCell in findCellWithoutWall(grid, grid[currentNode.position.x, currentNode.position.y]))
             {
                 if (closedList.Any(n => n.position == neighborCell.gridPosition))
                     continue; // Skip if the neighbor is in the closed list
@@ -69,6 +77,46 @@ public class Astar
         return null;
     }
 
+    private bool CheckIfGrid(Vector2Int endPos, Vector2Int gridsize)
+    {
+        bool result;
+        Vector2Int i = new(0, 0);
+        result = endPos.x < gridSize.x && endPos.y < gridsize.y && endPos.x >= i.x && endPos.y >= i.y;
+        return result;
+    }
+    //vind nogsteeds neighbours
+    private List<Cell> findCellWithoutWall(Cell[,] grid, Cell currentCell)
+    {
+        List<Cell> result = new List<Cell>();
+
+        for (int x = -1; x < 2; x++)
+        {
+            for (int y = -1; y < 2; y++)
+            {
+                if (Math.Abs(x) == Math.Abs(y))
+                    continue;
+
+                int cellX = currentCell.gridPosition.x + x;
+                int cellY = currentCell.gridPosition.y + y;
+
+                //dit is dubbel op want de maze spawnt met muren, maar waarom ook niet.
+                if (cellX < 0 || cellX >= grid.GetLength(0) || cellY < 0 || cellY >= grid.GetLength(1) || Mathf.Abs(x) == Mathf.Abs(y))
+                {
+                    continue;
+                }
+                // Check for walls, if wall in that dir: skip
+                if ((x == -1 && currentCell.HasWall(Wall.LEFT)) || (x == 1 && currentCell.HasWall(Wall.RIGHT)) ||
+                    (y == -1 && currentCell.HasWall(Wall.DOWN)) || (y == 1 && currentCell.HasWall(Wall.UP)))
+                    continue;
+
+                result.Add(grid[cellX, cellY]);
+            }
+        }
+
+
+        return result;
+    }
+
     private int GetHeuristic(Vector2Int pointA, Vector2Int pointB)
     {
         int xDistance = Math.Abs(pointA.x - pointB.x);
@@ -86,6 +134,7 @@ public class Astar
             currentNode = currentNode.parent;
         }
         path.Reverse();
+
         return path;
     }
 

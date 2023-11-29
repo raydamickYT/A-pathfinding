@@ -87,7 +87,7 @@ public class MazeGeneration : MonoBehaviour
             int randomX = Random.Range(0, width);
             int randomY = Random.Range(0, height);
             Cell randomCell = grid[randomX, randomY];
-            List<Cell> neighbours = randomCell.GetNeighbours(grid);
+            List<Cell> neighbours = randomCell.GetNeighbours(grid, this);
             if (neighbours.Count > 0)
             {
                 Cell randomNeighbour = neighbours[Random.Range(0, neighbours.Count)];
