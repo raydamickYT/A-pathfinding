@@ -29,7 +29,7 @@ public class Cell
         return (walls & wallDirection) != 0;
     }
 
-    public List<Cell> GetNeighbours(Cell[,] grid, object AstarScript)
+    public List<Cell> GetNeighbours(Cell[,] grid)
     {
         List<Cell> result = new List<Cell>();
         for (int x = -1; x < 2; x++)
